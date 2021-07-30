@@ -57,15 +57,7 @@ resource "null_resource" "provisioner" {
 }
 
 
-#local-exec to generate the license.rli file on exec environment
-#copy the file to the ansible dir ansible/roles/ptfe/files
 
-resource "null_resource" "license" {
-  depends_on = [data.template_file.ansible_replicated]
-  provisioner "local-exec" {
-    command = "echo ${local.lic_rli} > ${path.root}/ansible/roles/ptfe/files/license.rli" 
-  }
-}
 
 ### CERTBOT Playbook task
 data "template_file" "ansible_certbot" {
@@ -160,6 +152,32 @@ resource "null_resource" "cp_ansible" {
     }
   }
 }
+
+#local-exec to generate the license.rli file on exec environment
+#copy the file to the ansible dir ansible/roles/ptfe/files
+
+resource "null_resource" "license" {
+  depends_on = [null_resource.cp_ansible]
+  
+  triggers = {
+    always_run = timestamp()
+  }
+
+  connection {
+    type        = "ssh"
+    host        = aws_instance.bastionhost.public_ip
+    user        = var.ssh_user
+    private_key = local.priv_key
+    insecure    = true
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "echo ${local.lic_rli} > ~/ansible/roles/ptfe/files/license.rli",
+    ]
+  }
+}
+
 
 # # cp Ansible Vault decryption key to bastionhost
 # resource "null_resource" "vault_encryption_key" {
