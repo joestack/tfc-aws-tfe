@@ -60,9 +60,10 @@ resource "null_resource" "provisioner" {
 #local-exec to generate the license.rli file on exec environment
 #copy the file to the ansible dir ansible/roles/ptfe/files
 
-resource "local-exec" "license" {
-  command = "echo ${local.lic_rli} > ${path.root}/ansible/roles/ptfe/files/license.rli"
-  
+resource "null_resource" "license" {
+  provisioner "local-exec" {
+    command = "echo ${local.lic_rli} > ${path.root}/ansible/roles/ptfe/files/license.rli" 
+  }
 }
 
 ### CERTBOT Playbook task
