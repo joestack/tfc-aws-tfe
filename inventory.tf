@@ -150,30 +150,30 @@ resource "null_resource" "cp_ansible" {
   }
 }
 
-# cp Ansible Vault decryption key to bastionhost
-resource "null_resource" "vault_encryption_key" {
-  depends_on = [
-    null_resource.cp_ansible
-  ]
+# # cp Ansible Vault decryption key to bastionhost
+# resource "null_resource" "vault_encryption_key" {
+#   depends_on = [
+#     null_resource.cp_ansible
+#   ]
 
-  triggers = {
-    always_run = timestamp()
-  }
+#   triggers = {
+#     always_run = timestamp()
+#   }
 
-  connection {
-    type        = "ssh"
-    host        = aws_instance.bastionhost.public_ip
-    user        = var.ssh_user
-    private_key = local.priv_key
-    insecure    = true
-  }
+#   connection {
+#     type        = "ssh"
+#     host        = aws_instance.bastionhost.public_ip
+#     user        = var.ssh_user
+#     private_key = local.priv_key
+#     insecure    = true
+#   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "echo ${var.tfe_rli_vault_password} > ~/.vault-pw.txt ",
-    ]
-  }
-}
+#   provisioner "remote-exec" {
+#     inline = [
+#       "echo ${var.tfe_rli_vault_password} > ~/.vault-pw.txt ",
+#     ]
+#   }
+# }
 
 
 ##
