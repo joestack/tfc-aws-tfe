@@ -1,0 +1,22 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: False
+
+  tasks:
+  - name: install python 2
+    raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+    retries: 5
+    delay: 15
+    register: result
+    until: result.rc == 0
+
+- hosts: tfenodes
+  become: yes
+  gather_facts: yes
+  roles:
+  - common
+  #- create_cert
+  #- copy_cert
+  - ptfe
+
