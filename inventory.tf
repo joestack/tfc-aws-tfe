@@ -183,7 +183,6 @@ resource "null_resource" "ansible_run" {
   depends_on = [
     null_resource.cp_ansible,
     null_resource.provisioner,
-    null_resource.vault_encryption_key,
     local_file.ansible_settings,
     local_file.ansible_replicated,
     aws_instance.tfe_nodes,
