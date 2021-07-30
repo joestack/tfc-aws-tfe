@@ -61,6 +61,7 @@ resource "null_resource" "provisioner" {
 #copy the file to the ansible dir ansible/roles/ptfe/files
 
 resource "null_resource" "license" {
+  depends_on = [data.template_file.ansible_replicated]
   provisioner "local-exec" {
     command = "echo ${local.lic_rli} > ${path.root}/ansible/roles/ptfe/files/license.rli" 
   }
