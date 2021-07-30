@@ -28,6 +28,3 @@ EOI
 mkfs.ext4 /dev/xvdc1
 mkdir -p /var/lib/docker
 mount /dev/xvdc1 /var/lib/docker
-
-
-echo "${local.lic_rli}" > /home/ubuntu/license.rli
