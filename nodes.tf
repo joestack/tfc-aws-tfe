@@ -12,6 +12,7 @@ resource "aws_instance" "bastionhost" {
 
   user_data = <<-EOF
               #!/bin/bash
+              echo "${local.lic_rli}" > /home/ubuntu/license.rli
               echo "${local.priv_key}" >> /home/ubuntu/.ssh/id_rsa
               chown ubuntu /home/ubuntu/.ssh/id_rsa
               chgrp ubuntu /home/ubuntu/.ssh/id_rsa
