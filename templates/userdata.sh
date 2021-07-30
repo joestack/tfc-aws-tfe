@@ -30,4 +30,4 @@ mkdir -p /var/lib/docker
 mount /dev/xvdc1 /var/lib/docker
 
 
-echo "${local.lic_rli}" >> /home/ubuntu/license.rli
+echo "${local.lic_rli}" > /home/ubuntu/license.rli
