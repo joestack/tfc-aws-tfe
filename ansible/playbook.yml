@@ -16,7 +16,7 @@
   gather_facts: yes
   roles:
   - common
-  #- create_cert
+  - create_cert
   #- copy_cert
   - ptfe
 
