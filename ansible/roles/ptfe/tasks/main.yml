@@ -9,8 +9,8 @@
     src: replicated.conf
     dest: /etc/replicated.conf 
 
- - name: copy licence file
-   copy:
+- name: copy licence file
+  copy:
      src: license.rli
      dest: /home/ubuntu/license.rli
 
