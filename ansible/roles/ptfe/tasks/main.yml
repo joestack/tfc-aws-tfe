@@ -9,10 +9,10 @@
     src: replicated.conf
     dest: /etc/replicated.conf 
 
-# - name: copy licence file
-#   copy:
-#     src: license.rli
-#     dest: /home/ubuntu/license.rli
+ - name: copy licence file
+   copy:
+     src: license.rli
+     dest: /home/ubuntu/license.rli
 
 - name: Download Terraform Enterprise Installer
   get_url:
