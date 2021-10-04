@@ -59,7 +59,7 @@ resource "null_resource" "provisioner" {
 
 
 
-### CERTBOT Playbook task
+### CERTBOT Playbook role create_cert - modify the email address relatet to the TLS cert 
 data "template_file" "ansible_certbot" {
   template   = file("${path.root}/templates/certbot.tpl")
   depends_on = [aws_instance.tfe_nodes]
@@ -70,6 +70,7 @@ data "template_file" "ansible_certbot" {
   }
 }
 
+#and create a local copy of that main.yml on the exec environment 
 resource "local_file" "ansible_certbot" {
   depends_on = [data.template_file.ansible_certbot]
 
@@ -130,12 +131,14 @@ resource "local_file" "ansible_settings" {
 }
 
 ##
-## here we copy the Ansible Playbook to the Bastionhost
+## here we copy the entire Ansible Playbook from the local executin entironment to the Bastionhost
 ##
 resource "null_resource" "cp_ansible" {
   depends_on = [
     null_resource.provisioner,
-    local_file.ansible_certbot
+    local_file.ansible_certbot,
+    local_file.ansible_replicated,
+    local_file.ansible_settings
     ]
 
   triggers = {
@@ -182,32 +185,6 @@ resource "null_resource" "license" {
 }
 
 
-# # cp Ansible Vault decryption key to bastionhost
-# resource "null_resource" "vault_encryption_key" {
-#   depends_on = [
-#     null_resource.cp_ansible
-#   ]
-
-#   triggers = {
-#     always_run = timestamp()
-#   }
-
-#   connection {
-#     type        = "ssh"
-#     host        = aws_instance.bastionhost.public_ip
-#     user        = var.ssh_user
-#     private_key = local.priv_key
-#     insecure    = true
-#   }
-
-#   provisioner "remote-exec" {
-#     inline = [
-#       "echo ${var.tfe_rli_vault_password} > ~/.vault-pw.txt ",
-#     ]
-#   }
-# }
-
-
 ##
 ## here we trigger the execution of the Ansible Playbook automatically with every Terraform run
 ##
@@ -215,12 +192,10 @@ resource "null_resource" "ansible_run" {
   depends_on = [
     null_resource.cp_ansible,
     null_resource.provisioner,
-    local_file.ansible_settings,
-    local_file.ansible_replicated,
+    null_resource.license,
     aws_instance.tfe_nodes,
     aws_route53_record.bastionhost
   ]
-    #local_file.ansible_inventory,
     
   triggers = {
     always_run = timestamp()
@@ -237,7 +212,6 @@ resource "null_resource" "ansible_run" {
   provisioner "remote-exec" {
     inline = [
       "echo 'ssh is up...'",
-      #"[ -e ~/ansible/roles/ptfe/files/license.rli ] && ansible-vault decrypt ~/ansible/roles/ptfe/files/license.rli --vault-password-file=~/.vault-pw.txt ",
       "sleep 60 && ansible-playbook -i ~/inventory ~/ansible/playbook.yml ",
     ]
   }
