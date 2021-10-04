@@ -133,7 +133,10 @@ resource "local_file" "ansible_settings" {
 ## here we copy the Ansible Playbook to the Bastionhost
 ##
 resource "null_resource" "cp_ansible" {
-  depends_on = [null_resource.provisioner]
+  depends_on = [
+    null_resource.provisioner,
+    local_file.ansible_certbot
+    ]
 
   triggers = {
     always_run = timestamp()
