@@ -28,4 +28,6 @@ There are some prerequisites that you need to take care of:
 
 
 
+PS: $ replicatedctl app-config export > settings.json
+
 
