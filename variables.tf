@@ -17,6 +17,12 @@ variable "tfe_node_install" {
   default     = "0"
 }
 
+variable "kk_node_install" {
+  description = "1=yes, 0=no"
+  default     = "1"
+}
+
+
 variable "instance_type" {
   description = "instance size to be used for worker nodes"
   default     = "t2.medium"
