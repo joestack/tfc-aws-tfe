@@ -143,7 +143,7 @@ resource "local_file" "ansible_settings" {
 ## here we copy the entire Ansible Playbook from the local executin entironment to the Bastionhost
 ##
 resource "null_resource" "cp_ansible" {
-  count      = var.tfe_node_install
+  #count      = var.tfe_node_install
   depends_on = [
     null_resource.provisioner,
     local_file.ansible_certbot,
