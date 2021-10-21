@@ -2,6 +2,10 @@ output "Bastionhost_public_IP" {
   value = "ssh ${var.ssh_user}@${aws_instance.bastionhost.public_ip}"
 }
 
+output "Keycloak_public_IP" {
+  value = "ssh ${var.ssh_user}@${aws_instance.keycloak_node.public_ip}"
+}
+
 output "Bastionhost_DNS" {
   value = aws_route53_record.bastionhost.name
 }

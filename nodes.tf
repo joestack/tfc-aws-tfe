@@ -58,3 +58,20 @@ resource "aws_instance" "tfe_nodes" {
 }
 
 
+resource "aws_instance" "keycloak_node" {
+  count                       = var.kk_node_install
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = var.instance_type
+  subnet_id                   = aws_subnet.dmz_subnet.id
+  private_ip                  = cidrhost(aws_subnet.dmz_subnet.cidr_block, 200)
+  associate_public_ip_address = "true"
+  vpc_security_group_ids      = [aws_security_group.tfe.id]
+  key_name                    = var.pub_key
+
+
+  tags = {
+    Name        = format("kk-%02d", count.index + 1)
+  }
+
+  user_data = file("./templates/kk_userdata.sh")
+}
