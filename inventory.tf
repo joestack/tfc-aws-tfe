@@ -13,6 +13,7 @@ data "template_file" "ansible_tfe_hosts" {
 
 
 data "template_file" "ansible_skeleton" {
+  count      = var.tfe_node_install
   template = file("${path.root}/templates/ansible_skeleton.tpl")
 
   vars = {
@@ -26,6 +27,7 @@ data "template_file" "ansible_skeleton" {
 ## on the Terraform exec environment 
 ##
 resource "local_file" "ansible_inventory" {
+  count      = var.tfe_node_install
   depends_on = [data.template_file.ansible_skeleton]
 
   content  = data.template_file.ansible_skeleton.rendered
@@ -36,6 +38,7 @@ resource "local_file" "ansible_inventory" {
 ## copy the local file to the tfe_node
 ##
 resource "null_resource" "provisioner" {
+  count      = var.tfe_node_install
   depends_on = [local_file.ansible_inventory]
 
   triggers = {
@@ -61,6 +64,7 @@ resource "null_resource" "provisioner" {
 
 ### CERTBOT Playbook role create_cert - modify the email address relatet to the TLS cert 
 data "template_file" "ansible_certbot" {
+  count      = var.tfe_node_install
   template   = file("${path.root}/templates/certbot.tpl")
   depends_on = [aws_instance.tfe_nodes]
 
@@ -72,6 +76,7 @@ data "template_file" "ansible_certbot" {
 
 #and create a local copy of that main.yml on the exec environment 
 resource "local_file" "ansible_certbot" {
+  count      = var.tfe_node_install
   depends_on = [data.template_file.ansible_certbot]
 
   content  = data.template_file.ansible_certbot.rendered
@@ -138,6 +143,7 @@ resource "local_file" "ansible_settings" {
 ## here we copy the entire Ansible Playbook from the local executin entironment to the Bastionhost
 ##
 resource "null_resource" "cp_ansible" {
+  count      = var.tfe_node_install
   depends_on = [
     null_resource.provisioner,
     local_file.ansible_certbot,
