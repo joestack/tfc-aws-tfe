@@ -94,6 +94,7 @@ data "template_file" "ansible_replicated" {
 }
 
 resource "local_file" "ansible_replicated" {
+  count      = var.tfe_node_install
   depends_on = [data.template_file.ansible_replicated]
 
   content  = data.template_file.ansible_replicated.rendered
@@ -126,6 +127,7 @@ data "template_file" "ansible_settings" {
 }
 
 resource "local_file" "ansible_settings" {
+  count      = var.tfe_node_install
   depends_on = [data.template_file.ansible_settings]
 
   content  = data.template_file.ansible_settings.rendered
