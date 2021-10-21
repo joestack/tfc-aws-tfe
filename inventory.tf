@@ -173,6 +173,7 @@ resource "null_resource" "cp_ansible" {
 #copy the file to the ansible dir ansible/roles/ptfe/files
 
 resource "null_resource" "license" {
+  count      = var.tfe_node_install 
   depends_on = [null_resource.cp_ansible]
   
   triggers = {
