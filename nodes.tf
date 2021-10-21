@@ -76,6 +76,15 @@ resource "aws_instance" "keycloak_node" {
   user_data = file("./templates/kk_userdata.sh")
 }
 
+resource "aws_route53_record" "kknode" {
+  count   = var.kk_node_install
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = lookup(aws_instance.keycloak_node.*.tags[count.index], "Name")
+  type    = "A"
+  ttl     = "300"
+  records = [element(aws_instance.keycloak_node.*.public_ip, count.index )]
+  #[aws_instance.tfe_nodes.public_ip]
+}
 
 resource "aws_security_group" "kk" {
   name        = "${var.name}-kk-sg"
