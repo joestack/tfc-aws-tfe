@@ -3,7 +3,7 @@ output "Bastionhost_public_IP" {
 }
 
 output "Keycloak_public_IP" {
-  value = "ssh ${var.ssh_user}@${aws_instance.keycloak_node.*.public_ip}"
+  value = "ssh ${var.ssh_user}@${aws_instance.keycloak_node.public_ip[0]}"
 }
 
 output "Bastionhost_DNS" {
