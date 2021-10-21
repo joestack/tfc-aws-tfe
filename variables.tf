@@ -12,9 +12,9 @@ variable "email" {
   default     = "joern@hashicorp.com"
 }
 
-variable "tfe_node_count" {
-  description = "number of worker nodes"
-  default     = "1"
+variable "tfe_node_install" {
+  description = "1=yes, 0=no"
+  default     = "0"
 }
 
 variable "instance_type" {

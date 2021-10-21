@@ -27,7 +27,7 @@ resource "aws_instance" "bastionhost" {
 }
 
 resource "aws_instance" "tfe_nodes" {
-  count                       = var.tfe_node_count
+  count                       = var.tfe_node_install
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
   subnet_id                   = aws_subnet.dmz_subnet.id

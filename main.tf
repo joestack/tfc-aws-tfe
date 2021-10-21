@@ -93,7 +93,7 @@ resource "aws_route53_record" "bastionhost" {
 }
 
 resource "aws_route53_record" "tfenodes" {
-  count   = var.tfe_node_count
+  count   = var.tfe_node_install
   zone_id = data.aws_route53_zone.selected.zone_id
   name    = lookup(aws_instance.tfe_nodes.*.tags[count.index], "Name")
   type    = "A"
