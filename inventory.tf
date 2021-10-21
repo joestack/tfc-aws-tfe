@@ -1,6 +1,6 @@
 
 data "template_file" "ansible_tfe_hosts" {
-  count      = var.tfe_node_count
+  count      = var.tfe_node_install
   template   = file("${path.root}/templates/ansible_hosts.tpl")
   depends_on = [aws_instance.tfe_nodes]
 
