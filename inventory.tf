@@ -79,7 +79,7 @@ resource "local_file" "ansible_certbot" {
   count      = var.tfe_node_install
   depends_on = [data.template_file.ansible_certbot]
 
-  content  = data.template_file.ansible_certbot.rendered
+  content  = data.template_file.ansible_certbot.*.rendered
   filename = "${path.root}/ansible/roles/create_cert/tasks/main.yml"
 }
 
@@ -102,7 +102,7 @@ resource "local_file" "ansible_replicated" {
   count      = var.tfe_node_install
   depends_on = [data.template_file.ansible_replicated]
 
-  content  = data.template_file.ansible_replicated.rendered
+  content  = data.template_file.ansible_replicated.*.rendered
   filename = "${path.root}/ansible/roles/ptfe/files/replicated.conf"
 }
 
@@ -135,7 +135,7 @@ resource "local_file" "ansible_settings" {
   count      = var.tfe_node_install
   depends_on = [data.template_file.ansible_settings]
 
-  content  = data.template_file.ansible_settings.rendered
+  content  = data.template_file.ansible_settings.*.rendered
   filename = "${path.root}/ansible/roles/ptfe/files/settings.json"
 }
 
