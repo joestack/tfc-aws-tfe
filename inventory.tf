@@ -30,7 +30,7 @@ resource "local_file" "ansible_inventory" {
   count      = var.tfe_node_install
   depends_on = [data.template_file.ansible_skeleton]
 
-  content  = data.template_file.ansible_skeleton.rendered
+  content  = data.template_file.ansible_skeleton.*.rendered
   filename = "${path.root}/inventory"
 }
 
