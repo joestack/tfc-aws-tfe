@@ -200,6 +200,7 @@ resource "null_resource" "license" {
 ## here we trigger the execution of the Ansible Playbook automatically with every Terraform run
 ##
 resource "null_resource" "ansible_run" {
+  count      = var.tfe_node_install
   depends_on = [
     null_resource.cp_ansible,
     null_resource.provisioner,
