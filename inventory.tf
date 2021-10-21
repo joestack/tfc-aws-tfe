@@ -81,6 +81,7 @@ resource "local_file" "ansible_certbot" {
 # Playbook file replicated.conf
 
 data "template_file" "ansible_replicated" {
+  count      = var.tfe_node_install
   template   = file("${path.root}/templates/replicated.conf.tpl")
   depends_on = [aws_instance.tfe_nodes]
 
@@ -109,6 +110,7 @@ resource "random_string" "settings_backup_token" {
 
 
 data "template_file" "ansible_settings" {
+  count      = var.tfe_node_install
   template   = file("${path.root}/templates/settings.json.tpl")
   depends_on = [
                 aws_instance.tfe_nodes,
