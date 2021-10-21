@@ -110,6 +110,16 @@ resource "aws_security_group_rule" "kk-https" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
+resource "aws_security_group_rule" "kk-management" {
+  security_group_id = aws_security_group.kk.id
+  type              = "ingress"
+  from_port         = 9990
+  to_port           = 9990
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+
 resource "aws_security_group_rule" "kk-egress" {
   security_group_id = aws_security_group.kk.id
   type              = "egress"
